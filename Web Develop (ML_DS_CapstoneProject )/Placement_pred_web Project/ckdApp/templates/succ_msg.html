@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg p-4">
+
+        <h2 class="text-center text-primary">
+            Placement Prediction Result
+        </h2>
+
+        <hr>
+
+        <h4>Student Details</h4>
+
+        <table class="table table-bordered table-striped">
+
+            <tr>
+                <th>SSC Percentage</th>
+                <td>{{ ssc_p }}</td>
+            </tr>
+
+            <tr>
+                <th>HSC Percentage</th>
+                <td>{{ hsc_p }}</td>
+            </tr>
+
+            <tr>
+                <th>Degree Percentage</th>
+                <td>{{ degree_p }}</td>
+            </tr>
+
+            <tr>
+                <th>Employability Test %</th>
+                <td>{{ etest_p }}</td>
+            </tr>
+
+            <tr>
+                <th>MBA Percentage</th>
+                <td>{{ mba_p }}</td>
+            </tr>
+
+        </table>
+
+        <hr>
+
+        <h3 class="text-center">
+
+            {% if out == 1 %}
+
+                <span class="text-success">
+                    🎉 Congratulations! The student is likely to be PLACED.
+                </span>
+
+            {% else %}
+
+                <span class="text-danger">
+                    ❌ The student is currently NOT likely to be placed.
+                </span>
+
+            {% endif %}
+
+        </h3>
+
+        <div class="text-center mt-4">
+
+            <a href="{% url 'ckdApp:ckd' %}" class="btn btn-primary">
+                Predict Another Student
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

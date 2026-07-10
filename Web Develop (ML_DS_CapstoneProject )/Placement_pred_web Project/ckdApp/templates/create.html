@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block body_block %}
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg p-4">
+
+        <h2 class="text-center text-primary">
+            Placement Prediction System
+        </h2>
+
+        <p class="text-center text-muted">
+            Enter the student's academic details to predict placement.
+        </p>
+
+        <hr>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form|crispy }}
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg">
+                    Predict Placement
+                </button>
+
+                <button type="reset" class="btn btn-secondary btn-lg">
+                    Reset
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
