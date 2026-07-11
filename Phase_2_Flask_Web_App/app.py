@@ -11,7 +11,7 @@ app = Flask(__name__)
 # ==========================
 # Upload Folder
 # ==========================
-UPLOAD_FOLDER = "Static/uploads"
+UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ==========================
