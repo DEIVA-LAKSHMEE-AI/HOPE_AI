@@ -141,3 +141,27 @@ def upload():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
+
+@app.route("/debug_upload", methods=["GET", "POST"])
+def debug_upload():
+    if request.method == "GET":
+        return """
+        <h2>Upload a WAV file to test the model directly</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="wavfile" accept=".wav">
+            <button type="submit">Test</button>
+        </form>
+        """
+
+    file = request.files.get("wavfile")
+    if not file:
+        return "No file uploaded."
+
+    temp_path = os.path.join(UPLOAD_FOLDER, "debug_test.wav")
+    file.save(temp_path)
+
+    result, confidence = predict_parkinsons(temp_path, model, scaler)
+    os.remove(temp_path)
+
+    return f"<h2>Prediction: {result}</h2><h3>Confidence: {confidence:.2f}%</h3>"
