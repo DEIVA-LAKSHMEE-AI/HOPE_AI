@@ -1,5 +1,3 @@
-# HOPE_AI
-
 ## ParkinsonAI — Voice-Based Parkinson's Detection
 
 An AI-powered web app that analyzes a short voice recording and predicts the likelihood of Parkinson's disease using machine learning.
