@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import os
 import joblib
 import subprocess
+import traceback
 import imageio_ffmpeg
 
 from utils import predict_parkinsons
@@ -17,8 +18,13 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # ==========================
 # Load Model
 # ==========================
+print("Loading model...")
 model = joblib.load("Model/model.pkl")
+
+print("Loading scaler...")
 scaler = joblib.load("Model/scaler.pkl")
+
+print("Model loaded successfully.")
 
 # FFmpeg executable
 ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
@@ -40,6 +46,8 @@ def test():
 
     file_path = "../Phase_1_ML_Model/Datasets/Voice_Dataset/Healthy/healthy_000.wav"
 
+    print("Running test prediction...")
+
     result, confidence = predict_parkinsons(
         file_path,
         model,
@@ -60,6 +68,8 @@ def upload():
 
     try:
 
+        print("========== NEW REQUEST ==========")
+
         if "audio" not in request.files:
             return jsonify({
                 "success": False,
@@ -71,12 +81,14 @@ def upload():
         webm_path = os.path.join(UPLOAD_FOLDER, "recording.webm")
         wav_path = os.path.join(UPLOAD_FOLDER, "recording.wav")
 
-        # Save uploaded recording
+        print("Saving uploaded file...")
+
         audio.save(webm_path)
 
         print("Saved:", webm_path)
 
-        # Convert WebM -> WAV
+        print("Converting to wav...")
+
         subprocess.run(
             [
                 ffmpeg,
@@ -88,14 +100,17 @@ def upload():
             check=True
         )
 
-        print("Converted:", wav_path)
+        print("Conversion completed.")
 
-        # Predict
+        print("Calling predict_parkinsons()...")
+
         result, confidence = predict_parkinsons(
             wav_path,
             model,
             scaler
         )
+
+        print("Prediction completed.")
 
         return jsonify({
             "success": True,
@@ -105,28 +120,32 @@ def upload():
 
     except subprocess.CalledProcessError as e:
 
-        print("FFmpeg Error:")
-        print(e)
-
-        return jsonify({
-            "success": False,
-            "message": "FFmpeg conversion failed."
-        }), 500
-
-    except Exception as e:
-
-        print("General Error:")
-        print(e)
+        print("FFmpeg Error")
+        traceback.print_exc()
 
         return jsonify({
             "success": False,
             "message": str(e)
         }), 500
 
+    except Exception as e:
+
+        print("GENERAL ERROR")
+        traceback.print_exc()
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 500
+
+
+# ==========================
+# Dataset Test
+# ==========================
 @app.route("/dataset_test")
 def dataset_test():
 
-    file_path = r"D:\Projects\Parkinson_AI\Phase_1_ML_Model\Datasets\Voice_Dataset\Parkinsons\parkinsons_000.wav"
+    file_path = "Model/test.wav"
 
     result, confidence = predict_parkinsons(
         file_path,
@@ -138,6 +157,7 @@ def dataset_test():
     <h2>Prediction: {result}</h2>
     <h3>Confidence: {confidence:.2f}%</h3>
     """
+
 
 # ==========================
 # Run Flask
