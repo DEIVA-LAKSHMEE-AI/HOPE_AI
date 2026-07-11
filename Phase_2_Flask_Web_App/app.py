@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request, jsonify
 import os
+# Disable Numba JIT on Render
+os.environ["NUMBA_DISABLE_JIT"] = "1"
+from flask import Flask, render_template, request, jsonify
 import joblib
 import subprocess
 import traceback
