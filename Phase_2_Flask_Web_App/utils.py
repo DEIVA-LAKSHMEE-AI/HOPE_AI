@@ -1,3 +1,9 @@
+import os
+# Disable Numba JIT
+os.environ["NUMBA_DISABLE_JIT"] = "1"
+
+import numpy as np
+import librosa
 import numpy as np
 import librosa
 
