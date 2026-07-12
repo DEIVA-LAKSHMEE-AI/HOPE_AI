@@ -35,6 +35,19 @@ body{
 
 }
 
+.site-footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    text-align:center;
+    padding:14px 0;
+    color:rgba(255,255,255,.6);
+    font-size:13px;
+    font-weight:300;
+    z-index:1;
+}
+
 .glass-card{
 
     position:relative;
